@@ -14,7 +14,7 @@ import axios from 'axios';
 import Title from './Title';
 
 const fetchDestination = async () => {
-    const response = await axios.get("https://travel-d9kw.onrender.com/api/destination");
+    const response = await axios.get("http://localhost:8000/api/destination");
     console.log(response.data.data);
     return response.data.data;
 };
