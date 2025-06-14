@@ -10,14 +10,9 @@ import {
 } from '@mui/material';
 import Title from './Title';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { fetchTopSellingPackages } from '../context/contextApi';
 
 // Fetch function
-const fetchTopSellingPackages = async () => {
-    const response = await axios.get("http://localhost:8000/api/packages/top-selling");
-    console.log(response.data.data);
-    return response.data.data;
-};
 
 const PackageCard = () => {
      const { data, isLoading, isError } = useQuery({

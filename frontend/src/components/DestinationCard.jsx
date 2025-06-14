@@ -10,14 +10,9 @@ import {
 } from '@mui/material';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import Title from './Title';
+import { fetchDestination } from '../context/contextApi';
 
-const fetchDestination = async () => {
-    const response = await axios.get("http://localhost:8000/api/destination");
-    console.log(response.data.data);
-    return response.data.data;
-};
 
 const DestinationCard = () => {
     const [startIndex, setStartIndex] = useState(0);
