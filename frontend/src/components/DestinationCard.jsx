@@ -1,5 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import React, { useState } from 'react';
 import {
     Box,
     Grid,
@@ -7,10 +6,13 @@ import {
     CardMedia,
     CardContent,
     Typography,
-} from "@mui/material";
-import Title from "./Title";
+    IconButton,
+} from '@mui/material';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import Title from './Title';
 
-// Fetch function
 const fetchDestination = async () => {
     const response = await axios.get("http://localhost:8000/api/destination");
     console.log(response.data.data);
@@ -18,6 +20,9 @@ const fetchDestination = async () => {
 };
 
 const DestinationCard = () => {
+    const [startIndex, setStartIndex] = useState(0);
+    const cardsPerPage = 6;
+
     const { data, isLoading, isError } = useQuery({
         queryKey: ["topDestinations"],
         queryFn: fetchDestination,
@@ -25,6 +30,16 @@ const DestinationCard = () => {
 
     if (isLoading) return <Typography>Loading...</Typography>;
     if (isError) return <Typography>Error fetching packages</Typography>;
+
+    const handleNext = () => {
+        setStartIndex((prev) => Math.min(prev + cardsPerPage, data.length - cardsPerPage));
+    };
+
+    const handlePrev = () => {
+        setStartIndex((prev) => Math.max(prev - cardsPerPage, 0));
+    };
+
+    const visibleDestinations = data ? data.slice(startIndex, startIndex + cardsPerPage) : [];
 
     return (
         <>
@@ -40,27 +55,36 @@ const DestinationCard = () => {
                     paddingLeft: 2,
                     paddingRight: 2,
                     py: 4,
-                    margin: "0 auto",
-                    maxWidth: "1440px",
-                    boxSizing: "border-box",
+                    margin: '0 auto',
+                    maxWidth: '1440px',
+                    boxSizing: 'border-box',
                 }}
             >
                 <Grid
                     container
-                    spacing={3}
+                    columns={12}
+                    columnSpacing={3}
+                    rowSpacing={3}
                     justifyContent="center"
                 >
-                    {data.map((destination, index) => (
-                        <Grid item xs={12} sm={6} md={4} lg={3} key={destination.id}>
+                    {visibleDestinations.map((destination, index) => (
+                        <Grid
+                            item
+                            key={`${destination.id}-${index}`}
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            lg={3}
+                        >
                             <Card
                                 sx={{
-                                    width: "100%",
-                                    height: "100%",
+                                    width: '100%',
+                                    height: '100%',
                                     borderRadius: 3,
                                     boxShadow: 3,
-                                    transition: "transform 0.3s ease-in-out",
-                                    "&:hover": {
-                                        transform: "scale(1.03)",
+                                    transition: 'transform 0.3s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.03)',
                                     },
                                 }}
                             >
@@ -70,19 +94,19 @@ const DestinationCard = () => {
                                     image={destination.image}
                                     alt={destination.name}
                                     sx={{
-                                        objectFit: "cover",
-                                        borderRadius: "12px 12px 0 0",
+                                        objectFit: 'cover',
+                                        borderRadius: '12px 12px 0 0',
                                     }}
                                 />
                                 <CardContent
                                     sx={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
                                         padding: 2,
                                         flexDirection: {
-                                            xs: "column",
-                                            sm: "row",
+                                            xs: 'column',
+                                            sm: 'row',
                                         },
                                         gap: {
                                             xs: 1,
@@ -90,24 +114,14 @@ const DestinationCard = () => {
                                         },
                                     }}
                                 >
-                                    <Typography variant="h6" fontWeight="bold" color={"#009acc"}>
+                                    <Typography variant="h6" fontWeight="bold" color={'#009acc'}>
                                         {destination.name}
                                     </Typography>
                                     <Typography variant="h6">
-                                        <Box
-                                            component="span"
-                                            sx={{
-                                                fontWeight: "light",
-                                                fontSize: "18px",
-                                                textDecoration: "none",
-                                            }}
-                                        >
+                                        <Box component="span" sx={{ fontWeight: "light", fontSize: "18px", textDecoration: "none" }}>
                                             Starting from{" "}
                                         </Box>
-                                        <Box
-                                            component="span"
-                                            sx={{ fontWeight: "bold", color: "#009acc" }}
-                                        >
+                                        <Box component="span" sx={{ fontWeight: "bold", color: "#009acc" }}>
                                             ₹{destination.price}
                                         </Box>
                                     </Typography>
@@ -116,6 +130,39 @@ const DestinationCard = () => {
                         </Grid>
                     ))}
                 </Grid>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: 2,
+                        mt: 3,
+                    }}
+                >
+                    <IconButton
+                        onClick={handlePrev}
+                        disabled={startIndex === 0}
+                        sx={{
+                            bgcolor: '#009acc',
+                            color: 'white',
+                            '&:hover': { bgcolor: '#007b9c' },
+                            '&:disabled': { bgcolor: '#b0bec5' },
+                        }}
+                    >
+                        <ArrowBackIos />
+                    </IconButton>
+                    <IconButton
+                        onClick={handleNext}
+                        disabled={!data || startIndex + cardsPerPage >= data.length}
+                        sx={{
+                            bgcolor: '#009acc',
+                            color: 'white',
+                            '&:hover': { bgcolor: '#007b9c' },
+                            '&:disabled': { bgcolor: '#b0bec5' },
+                        }}
+                    >
+                        <ArrowForwardIos />
+                    </IconButton>
+                </Box>
             </Box>
         </>
     );
