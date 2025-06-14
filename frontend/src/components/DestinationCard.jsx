@@ -13,7 +13,6 @@ import { useQuery } from '@tanstack/react-query';
 import Title from './Title';
 import { fetchDestination } from '../context/contextApi';
 
-
 const DestinationCard = () => {
     const [startIndex, setStartIndex] = useState(0);
     const cardsPerPage = 6;

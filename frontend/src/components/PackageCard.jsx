@@ -12,7 +12,6 @@ import Title from './Title';
 import { useQuery } from '@tanstack/react-query';
 import { fetchTopSellingPackages } from '../context/contextApi';
 
-// Fetch function
 
 const PackageCard = () => {
      const { data, isLoading, isError } = useQuery({
