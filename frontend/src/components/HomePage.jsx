@@ -74,22 +74,6 @@ const HomePage = () => {
                 
             </Box>
         </Box>
-         {/* Bottom Content */ }
-    {/* <Box
-        sx={{
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            color: "white",
-            textAlign: "center",
-            p: 2,
-            borderRadius: 2,
-
-        }}
-    >
-        <Typography variant="body2" sx={{ fontSize: "16px" }}>
-            Embark on a journey like never before. From exotic beaches to bustling cities,
-            we have handpicked experiences waiting just for you.
-        </Typography>
-    </Box> */}
     </>
     );
 };
