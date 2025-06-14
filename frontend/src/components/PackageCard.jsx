@@ -14,7 +14,7 @@ import axios from 'axios';
 
 // Fetch function
 const fetchTopSellingPackages = async () => {
-    const response = await axios.get("https://travel-d9kw.onrender.com/api/packages/top-selling");
+    const response = await axios.get("http://localhost:8000/api/packages/top-selling");
     console.log(response.data.data);
     return response.data.data;
 };
